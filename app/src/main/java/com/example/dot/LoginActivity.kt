@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
@@ -83,6 +84,13 @@ class LoginActivity : AppCompatActivity() {
             else {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
+        }
+
+        //회원가입 페이지 라우팅
+        val register = findViewById<TextView>(R.id.register)
+        register.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 }
