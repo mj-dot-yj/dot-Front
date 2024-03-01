@@ -18,18 +18,21 @@ class LoginActivity : AppCompatActivity() {
 
         Log.d("keyhash", "keyhash : ${Utility.getKeyHash(this)}")
 
-        //카카오 로그인 정보 확인
-//        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-//            if (error != null) {
-//                Toast.makeText(this, "토큰 정보 보기 실패", Toast.LENGTH_SHORT).show()
-//            }
-//            else if (tokenInfo != null) {
-//                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
-//                val intent = Intent(this, LoginActivity::class.java)
-//                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-//                finish()
-//            }
-//        }
+        /**
+         * 로그인 되어 있는 경우 바로 메인 화면으로 이동
+         * 아닌 경우 로그인 화면으로 이동
+         */
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+                Toast.makeText(this, "토큰 정보 보기 실패", Toast.LENGTH_SHORT).show()
+            }
+            else if (tokenInfo != null) {
+                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                finish()
+            }
+        }
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if(error != null) {
