@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
@@ -22,6 +23,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //test - 사용자 이름 조회 API
+        val user_name = findViewById<TextView>(R.id.user_name)
+        UserApiClient.instance.me { user, error ->
+            if(error != null) {
+                Toast.makeText(this, "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
+            }
+            else if(user != null) {
+                user_name.text = user.kakaoAccount?.profile?.nickname
+            }
+        }
 
         //kakao 로그아웃
         val kakao_logout_button = findViewById<Button>(R.id.kakao_logout_button)
