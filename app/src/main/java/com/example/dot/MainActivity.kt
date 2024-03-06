@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import com.example.dot.util.GlobalApplicaion
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.Constants
@@ -28,7 +29,11 @@ class MainActivity : AppCompatActivity() {
         val user_name = findViewById<TextView>(R.id.user_name)
         UserApiClient.instance.me { user, error ->
             if(error != null) {
-                Toast.makeText(this, "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
+                if (GlobalApplicaion.prefs.getString("accessToken", "").isEmpty()){
+                    Toast.makeText(this, "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
+                } else {
+                    user_name.text = ""
+                }
             }
             else if(user != null) {
                 user_name.text = user.kakaoAccount?.profile?.nickname
