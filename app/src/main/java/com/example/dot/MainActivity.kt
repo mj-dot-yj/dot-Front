@@ -1,23 +1,17 @@
 package com.example.dot
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.example.dot.util.GlobalApplicaion
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.Constants
-import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.model.AuthErrorCause.*
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,14 +39,45 @@ class MainActivity : AppCompatActivity() {
         kakao_logout_button.setOnClickListener {
             UserApiClient.instance.logout { error ->
                 if (error != null) {
-                    Toast.makeText(this, "로그아웃 실패 $error", Toast.LENGTH_SHORT).show()
+                    if (GlobalApplicaion.prefs.getString("accessToken", "").isEmpty()) {
+                        Toast.makeText(this, "로그아웃 실패 $error", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val api = Api.create()
+                        val accessToken = GlobalApplicaion.prefs.getString("accessToken", "")
+
+                        api.userLogout(accessToken).enqueue(object : Callback<Void> {
+                            override fun onResponse(
+                                call: Call<Void>,
+                                response: Response<Void>
+                            ) {
+                                when (response.code()) {
+                                    200 -> {
+                                        GlobalApplicaion.prefs.setString("accessToken", "")
+                                        val intent =
+                                            Intent(this@MainActivity, LoginActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                    500 -> Toast.makeText(
+                                        this@MainActivity,
+                                        "로그아웃 실패 : 서버 오류",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                Log.d("로그아웃 통신 실패", t.message.toString())
+                            }
+                        })
+                    }
                 }
                 else {
                     Toast.makeText(this, "로그아웃 성공", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
             }
         }
 
