@@ -112,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                         200 -> {
                             val jsonObj: JSONObject = JSONObject(response.body()!!.result.toString())
                             val accessToken = jsonObj.getString("accessToken")
-                            GlobalApplicaion.prefs.setString("accessToken", accessToken)
+                            GlobalApplicaion.prefs.setString("accessToken", "Bearer $accessToken")
 
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             startActivity(intent)
