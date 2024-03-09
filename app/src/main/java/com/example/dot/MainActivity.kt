@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.dot.dialog.ConfirmDialog
 import com.example.dot.util.GlobalApplicaion
 import com.kakao.sdk.user.UserApiClient
 import retrofit2.Call
@@ -52,11 +53,18 @@ class MainActivity : AppCompatActivity() {
                             ) {
                                 when (response.code()) {
                                     200 -> {
-                                        GlobalApplicaion.prefs.setString("accessToken", "")
-                                        val intent =
-                                            Intent(this@MainActivity, LoginActivity::class.java)
-                                        startActivity(intent)
-                                        finish()
+                                        val dlgPopup = ConfirmDialog(this@MainActivity,"로그아웃 되었습니다.")
+                                        dlgPopup.show()
+                                        dlgPopup.window!!.setLayout(800,450)
+                                        dlgPopup.setCancelable(false)
+                                        dlgPopup.findViewById<Button>(R.id.okBtn).setOnClickListener{
+                                            dlgPopup.cancel()
+                                            GlobalApplicaion.prefs.setString("accessToken", "")
+                                            val intent =
+                                                Intent(this@MainActivity, LoginActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
                                     }
                                     500 -> Toast.makeText(
                                         this@MainActivity,
