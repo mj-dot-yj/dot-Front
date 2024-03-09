@@ -1,10 +1,9 @@
 package com.example.dot.util
 
 import android.app.Application
-import com.example.merona.util.PreferenceUtil
 import com.kakao.sdk.common.KakaoSdk
 
-class GlobalApplicaion : Application() {
+class GlobalApplication : Application() {
     companion object {
         lateinit var prefs: PreferenceUtil
     }
