@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.dot.R
 import com.example.dot.databinding.ActivityLoginBinding
+import com.example.dot.presentation.HomeActivity
 import com.example.dot.presentation.MainActivity
 import com.example.dot.presentation.common.ConfirmDialog
 import com.kakao.sdk.auth.model.OAuthToken
@@ -106,7 +107,7 @@ class LoginActivity : AppCompatActivity(), LoginViewModel.OnFinishedLoginListene
     }
 
     override fun onSuccess() {
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
         startActivity(intent)
         finish()
     }
