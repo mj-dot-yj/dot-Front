@@ -1,4 +1,4 @@
-package com.example.merona.util
+package com.example.dot.util
 
 import android.content.Context
 import android.content.SharedPreferences
