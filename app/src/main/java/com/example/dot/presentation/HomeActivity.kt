@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.dot.R
 import com.example.dot.databinding.ActivityHomeBinding
-import com.example.dot.presentation.fragment.ChallengeFragment
-import com.example.dot.presentation.fragment.MypageFragment
-import com.example.dot.presentation.fragment.TodoFragment
+import com.example.dot.presentation.challenge.ChallengeFragment
+import com.example.dot.presentation.todo.TodoFragment
+import com.example.dot.presentation.member.MypageFragment
 
 
 private const val TAG_TODO = "todo_fragment"
