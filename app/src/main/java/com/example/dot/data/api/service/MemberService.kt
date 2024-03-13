@@ -1,7 +1,7 @@
 package com.example.dot.data.api.service
 
 import com.example.dot.data.model.ApiResponse
-import com.example.dot.data.model.MemberRequest
+import com.example.dot.data.model.LoginRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface MemberService {
     @POST("/member/login")
     fun memberLogin(
-        @Body jsonParams: MemberRequest,
+        @Body jsonParams: LoginRequest,
     ): Call<ApiResponse>
 
     @POST("/logout")
