@@ -3,7 +3,7 @@ package com.example.dot.presentation.member
 import androidx.lifecycle.ViewModel
 import com.example.dot.data.api.ApiObject
 import com.example.dot.data.model.ApiResponse
-import com.example.dot.data.model.MemberRequest
+import com.example.dot.data.model.LoginRequest
 import com.example.dot.util.GlobalApplication
 import org.json.JSONObject
 import retrofit2.Call
@@ -19,7 +19,7 @@ class LoginViewModel : ViewModel() {
 
     fun login(id: String, pw: String, onFinishedLoginListener: OnFinishedLoginListener) {
         val apiObject = ApiObject
-        val data = MemberRequest(id, pw)
+        val data = LoginRequest(id, pw)
 
         apiObject.manageMember().memberLogin(data).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(
