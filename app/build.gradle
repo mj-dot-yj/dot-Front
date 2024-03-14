@@ -33,11 +33,7 @@ android {
 
     buildFeatures {
         viewBinding = true
-    }
-
-    //viewBindgin 설정
-    viewBinding {
-        enabled true
+        dataBinding = true
     }
 }
 
