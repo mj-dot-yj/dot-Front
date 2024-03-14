@@ -11,7 +11,8 @@ import retrofit2.Response
 
 class MemberWithdrawViewModel : ViewModel() {
     interface OnFinishedLoginListener {
-        fun onSuccess()
+        fun onCheckSuccess()
+        fun onSuccess(message: String)
         fun onFailure(message: String)
     }
 
@@ -31,7 +32,7 @@ class MemberWithdrawViewModel : ViewModel() {
                 ) {
                     when (response.code()) {
                         200 -> {
-                            // 탈퇴 진행
+                            onFinishedLoginListener.onCheckSuccess()
                         }
 
                         500 -> onFinishedLoginListener.onFailure("비밀번호가 일치하지 않습니다.")
@@ -39,6 +40,30 @@ class MemberWithdrawViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                    onFinishedLoginListener.onFailure("통신에 실패하였습니다.")
+                }
+            })
+    }
+
+    fun memberWithdraw(
+        onFinishedLoginListener: MemberWithdrawViewModel.OnFinishedLoginListener
+    ) {
+        val apiObject = ApiObject
+        val accessToken = GlobalApplication.prefs.getString("accessToken", "")
+
+        apiObject.manageMember().memberWithdraw(accessToken)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    when (response.code()) {
+                        200 -> {
+                            onFinishedLoginListener.onSuccess("탈퇴 되었습니다.")
+                        }
+
+                        500 -> onFinishedLoginListener.onFailure("탈퇴에 실패하였습니다.")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
                     onFinishedLoginListener.onFailure("통신에 실패하였습니다.")
                 }
             })

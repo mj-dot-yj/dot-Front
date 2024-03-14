@@ -1,5 +1,6 @@
 package com.example.dot.presentation.member
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.dot.R
 import com.example.dot.databinding.ActivityMemberWithdrawBinding
 import com.example.dot.presentation.common.ConfirmDialog
+import com.example.dot.util.GlobalApplication
 
 class MemberWithdrawActivity : AppCompatActivity(),
     MemberWithdrawViewModel.OnFinishedLoginListener {
@@ -33,8 +35,15 @@ class MemberWithdrawActivity : AppCompatActivity(),
         }
     }
 
-    override fun onSuccess() {
+    override fun onCheckSuccess() {
         // 탈퇴 진행
+        memberWithdrawViewModel.memberWithdraw(onFinishedLoginListener = this)
+    }
+
+    override fun onSuccess(message: String) {
+        // 탈퇴 성공
+        createDialogAndChange(message)
+        GlobalApplication.prefs.setString("accessToken", "")
     }
 
     override fun onFailure(message: String) {
@@ -46,6 +55,16 @@ class MemberWithdrawActivity : AppCompatActivity(),
         dialogPopup.setOkPopup()
         dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
             dialogPopup.cancel()
+        }
+    }
+
+    private fun createDialogAndChange(message: String) {
+        val dialogPopup = ConfirmDialog(this@MemberWithdrawActivity, message)
+        dialogPopup.setOkPopup()
+        dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+            val intent = Intent(this@MemberWithdrawActivity, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

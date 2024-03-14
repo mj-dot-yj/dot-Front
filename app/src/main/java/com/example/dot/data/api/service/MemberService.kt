@@ -5,6 +5,7 @@ import com.example.dot.data.model.CheckPwRequest
 import com.example.dot.data.model.LoginRequest
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Header
 import retrofit2.http.POST
 
@@ -24,4 +25,9 @@ interface MemberService {
         @Header("Authorization") accessToken: String,
         @Body jsonParams: CheckPwRequest
     ): Call<ApiResponse>
+
+    @DELETE("/member/delete")
+    fun memberWithdraw(
+        @Header("Authorization") accessToken: String
+    ): Call<Void>
 }
