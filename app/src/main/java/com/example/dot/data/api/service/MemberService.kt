@@ -3,6 +3,7 @@ package com.example.dot.data.api.service
 import com.example.dot.data.model.ApiResponse
 import com.example.dot.data.model.CheckPwRequest
 import com.example.dot.data.model.LoginRequest
+import com.example.dot.data.model.SignupRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -13,6 +14,11 @@ interface MemberService {
     @POST("/member/login")
     fun memberLogin(
         @Body jsonParams: LoginRequest,
+    ): Call<ApiResponse>
+
+    @POST("/member/signUp")
+    fun memberSignup(
+        @Body jsonParams: SignupRequest
     ): Call<ApiResponse>
 
     @POST("/logout")

@@ -4,17 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.dot.R
 import com.example.dot.databinding.ActivityRegisterBinding
+import com.example.dot.presentation.HomeActivity
 import com.example.dot.presentation.common.ConfirmDialog
 import java.util.regex.Pattern
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity(), SignupViewModel.OnFinishedSignupLister {
     private var mBinding: ActivityRegisterBinding? = null
     private val binding get() = mBinding!!
+    private lateinit var signupViewModel : SignupViewModel
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +25,7 @@ class RegisterActivity : AppCompatActivity() {
         mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        signupViewModel = ViewModelProvider(this)[SignupViewModel::class.java]
 
         setupClickListener()
     }
@@ -38,9 +40,14 @@ class RegisterActivity : AppCompatActivity() {
 
         //회원가입 완료 버튼 클릭 시 로그인 화면 이동
         binding.registerButton.setOnClickListener {
-            //회원가입 입력 유효성 체크
-            validation_check()
+            val name = binding.inputName.text.toString()
+            val email = binding.inputEmail.text.toString()
+            val password = binding.inputPassword.text.toString()
+            val phone = binding.inputPhone.text.toString()
 
+            //회원가입 입력 유효성 체크
+//            validation_check(name, email, password, phone)
+            signupViewModel.signup(name, email, password, phone, onFinishedsignupLister = this)!!
         }
     }
 
@@ -55,12 +62,8 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun validation_check() {
-        val name = binding.inputName.text.toString()
-        val email = binding.inputEmail.text.toString()
-        val password = binding.inputPassword.text.toString()
+    private fun validation_check(name:String, email:String, password:String, phone:String) {
         val checkpassword = binding.inputCheckpassword.text.toString()
-        val phone = binding.inputPhone.text.toString()
         val emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"
         val pwPattern = "^[A-Za-z0-9]{6,12}$"
         val phonePattern = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$"
@@ -91,5 +94,14 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText( this,"이메일 형식이 옳지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    override fun onSuccess() {
+        val intent = Intent(this@RegisterActivity, HomeActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onFailure(message: String) {
+        createDialog(message)
     }
 }
