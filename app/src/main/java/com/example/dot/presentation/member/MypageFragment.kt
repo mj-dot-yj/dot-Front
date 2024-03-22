@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.dot.databinding.FragmentMypageBinding
+import com.example.dot.util.GlobalApplication
 
 class MypageFragment : Fragment() {
 
@@ -17,6 +18,10 @@ class MypageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMypageBinding.inflate(inflater, container, false)
+
+        //사용자 정보 표시
+        binding!!.email.text = GlobalApplication.prefs.getString("email", "").toString()
+        binding!!.name.text = GlobalApplication.prefs.getString("name", "").toString()
 
         setupClickListener()
 
