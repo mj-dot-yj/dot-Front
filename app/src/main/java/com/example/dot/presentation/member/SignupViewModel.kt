@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.dot.data.api.ApiObject
 import com.example.dot.data.model.ApiResponse
 import com.example.dot.data.model.SignupRequest
+import com.example.dot.util.GlobalApplication
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,11 +17,10 @@ class SignupViewModel : ViewModel() {
 
         fun onFailure(message : String)
     }
-
     fun signup(name:String, id:String, pw:String, phone:String, onFinishedsignupLister: OnFinishedSignupLister) {
         val apiObject = ApiObject
         val data = SignupRequest(name, id, pw, phone)
-        Log.d("register signup name", data.name.toString())
+
         apiObject.manageMember().memberSignup(data).enqueue(object: Callback<ApiResponse> {
             override fun onResponse(
                 call: Call<ApiResponse>,
@@ -29,6 +29,10 @@ class SignupViewModel : ViewModel() {
                when (response.code()){
                    201 -> {
                        Log.d("register success", "성공")
+                       GlobalApplication.prefs.setString("name", name)
+                       GlobalApplication.prefs.setString("email", id)
+                       GlobalApplication.prefs.setString("password", pw)
+                       GlobalApplication.prefs.setString("phone", phone)
                    }
                    500 -> {
                        Log.d("register fail", "실패")
