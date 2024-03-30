@@ -29,16 +29,10 @@ class SignupViewModel : ViewModel() {
                when (response.code()){
                    201 -> {
                        Log.d("register success", "성공")
-                       GlobalApplication.prefs.setString("name", name)
-                       GlobalApplication.prefs.setString("email", id)
-                       GlobalApplication.prefs.setString("password", pw)
-                       GlobalApplication.prefs.setString("phone", phone)
                    }
                    500 -> {
                        Log.d("register fail", "실패")
                    }
-
-
                 }
             }
 
@@ -46,31 +40,6 @@ class SignupViewModel : ViewModel() {
                 Log.d("register sign up", t.message.toString())
             }
         })
-//        apiObject.manageMember().memberSignup(data).enqueue(object : Callback<ApiResponse> {
-//            override fun onResponse(
-//                call: Call<ApiResponse>,
-//                response: Response<ApiResponse>
-//            ) {
-//                when (response.code()) {
-//                    200 -> {
-//                        val result = response.body().toString()
-//                        Log.d("success register", response.body().toString())
-//                        onFinishedsignupLister.onSuccess()
-//                    }
-//                    201 -> {
-//                        Log.d("code", "201")
-//                    }
-//                    500 -> {
-//                        onFinishedsignupLister.onFailure("회원가입에 실패하였습니다.")
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-//                Log.d("code", "통신 실패")
-//                onFinishedsignupLister.onFailure("통신에 실패하였습니다.")
-//            }
-//        })
     }
 
 }
