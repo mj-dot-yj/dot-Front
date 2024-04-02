@@ -36,6 +36,12 @@ class MypageFragment : Fragment(), MemberInfoViewModel.OnGetDataListener {
     }
 
     private fun setupClickListener() {
+        // 회원 수정 버튼
+        binding!!.editButton.setOnClickListener {
+            val intent = Intent(this.activity, MemberEditActivity::class.java)
+            startActivity(intent)
+        }
+
         // 회원 탈퇴 버튼
         binding!!.withdrawalButton.setOnClickListener {
             val intent = Intent(this.activity, MemberWithdrawActivity::class.java)

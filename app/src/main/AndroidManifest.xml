@@ -20,6 +20,9 @@
             android:name=".presentation.member.MemberWithdrawActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.member.MemberEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.HomeActivity"
             android:exported="false" />
         <activity

@@ -38,4 +38,10 @@ interface MemberService {
     fun MemberByEmail(
         @Header("Authorization") accessToken: String
     ): Call<ApiResponse>
+
+    @POST("/member/modify")
+    fun memberEdit(
+        @Header("Authorization") accessToken: String,
+        @Body jsonParams: MemberInfoRequest
+    ): Call<ApiResponse>
 }
