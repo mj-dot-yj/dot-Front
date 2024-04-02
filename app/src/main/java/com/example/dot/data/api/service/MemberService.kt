@@ -1,9 +1,6 @@
 package com.example.dot.data.api.service
 
-import com.example.dot.data.model.ApiResponse
-import com.example.dot.data.model.CheckPwRequest
-import com.example.dot.data.model.LoginRequest
-import com.example.dot.data.model.SignupRequest
+import com.example.dot.data.model.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -39,8 +36,8 @@ interface MemberService {
         @Header("Authorization") accessToken: String
     ): Call<Void>
 
-    @GET("/member/info/{email}")
+    @POST("/member/info")
     fun MemberByEmail(
-        @Path("email") email : String
+        @Header("Authorization") accessToken: String
     ): Call<ApiResponse>
 }
