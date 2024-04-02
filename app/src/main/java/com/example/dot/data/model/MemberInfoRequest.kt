@@ -1,6 +1,6 @@
 package com.example.dot.data.model
 
-data class SignupRequest(
+data class MemberInfoRequest(
     val name: String? = null,
     val email: String? = null,
     val password: String? = null,

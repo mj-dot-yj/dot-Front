@@ -33,6 +33,10 @@ class MemberWithdrawActivity : AppCompatActivity(),
             val inputPw = binding.inputPassword.text.toString()
             memberWithdrawViewModel.checkPassword(inputPw, onFinishedLoginListener = this)
         }
+
+        binding.backButton.setOnClickListener{
+            onBackPressed()
+        }
     }
 
     override fun onCheckSuccess() {
@@ -42,29 +46,27 @@ class MemberWithdrawActivity : AppCompatActivity(),
 
     override fun onSuccess(message: String) {
         // 탈퇴 성공
-        createDialogAndChange(message)
-        GlobalApplication.prefs.setString("accessToken", "")
+        createDialog(message)
+        val dialogPopup = createDialog(message)
+        dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+            GlobalApplication.prefs.setString("accessToken", "")
+
+            val intent = Intent(this@MemberWithdrawActivity, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     override fun onFailure(message: String) {
-        createDialog(message)
-    }
-
-    private fun createDialog(message: String) {
-        val dialogPopup = ConfirmDialog(this@MemberWithdrawActivity, message)
-        dialogPopup.setOkPopup()
+        val dialogPopup = createDialog(message)
         dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
             dialogPopup.cancel()
         }
     }
 
-    private fun createDialogAndChange(message: String) {
+    private fun createDialog(message: String) : ConfirmDialog {
         val dialogPopup = ConfirmDialog(this@MemberWithdrawActivity, message)
         dialogPopup.setOkPopup()
-        dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
-            val intent = Intent(this@MemberWithdrawActivity, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+        return dialogPopup
     }
 }
