@@ -4,10 +4,8 @@ import com.example.dot.data.model.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
-import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 interface MemberService {
     @POST("/member/login")
@@ -17,7 +15,7 @@ interface MemberService {
 
     @POST("/member/signUp")
     fun memberSignup(
-        @Body jsonParams: SignupRequest
+        @Body jsonParams: MemberInfoRequest
     ): Call<ApiResponse>
 
     @POST("/logout")

@@ -4,8 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.dot.data.api.ApiObject
 import com.example.dot.data.model.ApiResponse
-import com.example.dot.data.model.SignupRequest
-import com.example.dot.util.GlobalApplication
+import com.example.dot.data.model.MemberInfoRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,7 +18,7 @@ class SignupViewModel : ViewModel() {
     }
     fun signup(name:String, id:String, pw:String, phone:String, onFinishedsignupLister: OnFinishedSignupLister) {
         val apiObject = ApiObject
-        val data = SignupRequest(name, id, pw, phone)
+        val data = MemberInfoRequest(name, id, pw, phone)
 
         apiObject.manageMember().memberSignup(data).enqueue(object: Callback<ApiResponse> {
             override fun onResponse(
