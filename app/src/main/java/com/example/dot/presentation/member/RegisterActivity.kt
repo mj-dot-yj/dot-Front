@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.dot.R
 import com.example.dot.data.model.MemberInfoRequest
 import com.example.dot.databinding.ActivityRegisterBinding
 import com.example.dot.presentation.common.ConfirmDialog
-import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity(), RegisterViewModel.OnFinishedRegisterListener {
     private var mBinding: ActivityRegisterBinding? = null
@@ -43,12 +41,10 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.OnFinishedRegist
             val name = binding.inputName.text.toString()
             val email = binding.inputEmail.text.toString()
             val password = binding.inputPassword.text.toString()
+            val checkPassword = binding.inputCheckpassword.text.toString()
             val phone = binding.inputPhone.text.toString()
-            val memberInfoRequest = MemberInfoRequest(name, email, password, phone)
-
-            //회원가입 입력 유효성 체크
-//            validation_check(name, email, password, phone)
-            registerViewModel.signup(memberInfoRequest, onFinishedRegisterListener = this)!!
+            val memberInfoRequest = MemberInfoRequest(name, email, password, checkPassword, phone)
+            register(memberInfoRequest)
         }
     }
 
@@ -58,39 +54,6 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.OnFinishedRegist
         return dialogPopup
     }
 
-    private fun validation_check(name:String, email:String, password:String, phone:String) {
-        val checkpassword = binding.inputCheckpassword.text.toString()
-        val emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"
-        val pwPattern = "^[A-Za-z0-9]{6,12}$"
-        val phonePattern = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$"
-        //항목이 비었을 때
-        if(name=="" || email=="" || password=="" || checkpassword=="" || phone=="") {
-            createDialog("회원정보를 모두 입력해주세요")
-        }
-        else {
-            if(Pattern.matches(emailPattern, email)) {
-                if(Pattern.matches(pwPattern, password)) {
-                    if(password == checkpassword) {
-                        if(Pattern.matches(phonePattern, phone)) {
-                            createDialog("회원가입에 성공하였습니다.")
-                        }
-                        else {
-                            Toast.makeText( this,"전화번호 형식이 옳지 않습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                    else {
-                        Toast.makeText( this,"비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                else {
-                    Toast.makeText( this,"비밀번호 형식이 옳지 않습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else {
-                Toast.makeText( this,"이메일 형식이 옳지 않습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
     override fun onSuccess(message: String) {
         createDialog(message)
         val dialogPopup = createDialog(message)
@@ -105,6 +68,18 @@ class RegisterActivity : AppCompatActivity(), RegisterViewModel.OnFinishedRegist
         val dialogPopup = createDialog(message)
         dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
             dialogPopup.cancel()
+        }
+    }
+
+    private fun register(memberInfoRequest : MemberInfoRequest){
+        val resultCheckValidation = memberInfoRequest.checkValidation()
+        if (resultCheckValidation.isEmpty()){
+            registerViewModel.signup(memberInfoRequest, onFinishedRegisterListener = this)!!
+        } else {
+            val dialogPopup = createDialog(resultCheckValidation)
+            dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+                dialogPopup.cancel()
+            }
         }
     }
 }

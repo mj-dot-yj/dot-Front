@@ -47,9 +47,10 @@ class MemberEditActivity : AppCompatActivity(),
             val name = binding!!.inputName.text.toString()
             val email = binding!!.inputEmail.text.toString()
             val password = binding!!.inputPassword.text.toString()
+            val checkPassword = binding.inputCheckpassword.text.toString()
             val phone = binding!!.inputPhone.text.toString()
-            val memberInfoRequest = MemberInfoRequest(name, email, password, phone)
-            memberEditViewModel.editMemberInfo(memberInfoRequest, onFinishedEditListener = this)
+            val memberInfoRequest = MemberInfoRequest(name, email, password, checkPassword, phone)
+            editMember(memberInfoRequest)
         }
     }
 
@@ -83,5 +84,17 @@ class MemberEditActivity : AppCompatActivity(),
         val dialogPopup = ConfirmDialog(this@MemberEditActivity, message)
         dialogPopup.setOkPopup()
         return dialogPopup
+    }
+
+    private fun editMember(memberInfoRequest : MemberInfoRequest){
+        val resultCheckValidation = memberInfoRequest.checkValidation()
+        if (resultCheckValidation.isEmpty()){
+            memberEditViewModel.editMemberInfo(memberInfoRequest, onFinishedEditListener = this)!!
+        } else {
+            val dialogPopup = createDialog(resultCheckValidation)
+            dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+                dialogPopup.cancel()
+            }
+        }
     }
 }
