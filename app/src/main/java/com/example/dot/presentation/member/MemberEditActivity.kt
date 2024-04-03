@@ -35,7 +35,7 @@ class MemberEditActivity : AppCompatActivity(),
     }
 
     private fun setData() {
-        memberInfoViewModel.showMemberInfo(OnGetDataListener = this)
+        memberInfoViewModel.showMemberInfo(onGetDataListener = this)
     }
 
     private fun setupClickListener() {
@@ -67,6 +67,7 @@ class MemberEditActivity : AppCompatActivity(),
         createDialog(message)
         val dialogPopup = createDialog(message)
         dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+            dialogPopup.cancel()
             onBackPressed()
         }
     }

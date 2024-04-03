@@ -17,7 +17,7 @@ class MemberInfoViewModel : ViewModel() {
         fun onFailureGetData(message: String)
     }
 
-    fun showMemberInfo(OnGetDataListener: OnGetDataListener) {
+    fun showMemberInfo(onGetDataListener: OnGetDataListener) {
         val idx = GlobalApplication.prefs.getString("idx", "")
         val accessToken = GlobalApplication.prefs.getString("accessToken", "")
         ApiObject.manageMember().memberByEmail(accessToken, idx).enqueue(object : Callback<ApiResponse> {
@@ -32,13 +32,13 @@ class MemberInfoViewModel : ViewModel() {
                         val email = jsonObject.get("email").toString()
                         val phone = jsonObject.get("phone").toString()
                         val memberInfoResponse = MemberInfoResponse(name, email, phone)
-                        OnGetDataListener.onSuccessGetData(memberInfoResponse)
+                        onGetDataListener.onSuccessGetData(memberInfoResponse)
                     }
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                OnGetDataListener.onFailureGetData("통신에 실패하였습니다.")
+                onGetDataListener.onFailureGetData("통신에 실패하였습니다.")
             }
         })
     }
