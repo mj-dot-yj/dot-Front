@@ -8,15 +8,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.dot.R
+import com.example.dot.data.model.MemberInfoRequest
 import com.example.dot.databinding.ActivityRegisterBinding
-import com.example.dot.presentation.HomeActivity
 import com.example.dot.presentation.common.ConfirmDialog
 import java.util.regex.Pattern
 
-class RegisterActivity : AppCompatActivity(), SignupViewModel.OnFinishedSignupLister {
+class RegisterActivity : AppCompatActivity(), RegisterViewModel.OnFinishedRegisterListener {
     private var mBinding: ActivityRegisterBinding? = null
     private val binding get() = mBinding!!
-    private lateinit var signupViewModel : SignupViewModel
+    private lateinit var registerViewModel : RegisterViewModel
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +25,7 @@ class RegisterActivity : AppCompatActivity(), SignupViewModel.OnFinishedSignupLi
         mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        signupViewModel = ViewModelProvider(this)[SignupViewModel::class.java]
+        registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
         setupClickListener()
     }
@@ -44,22 +44,18 @@ class RegisterActivity : AppCompatActivity(), SignupViewModel.OnFinishedSignupLi
             val email = binding.inputEmail.text.toString()
             val password = binding.inputPassword.text.toString()
             val phone = binding.inputPhone.text.toString()
+            val memberInfoRequest = MemberInfoRequest(name, email, password, phone)
 
             //회원가입 입력 유효성 체크
 //            validation_check(name, email, password, phone)
-            signupViewModel.signup(name, email, password, phone, onFinishedsignupLister = this)!!
+            registerViewModel.signup(memberInfoRequest, onFinishedRegisterListener = this)!!
         }
     }
 
-    private fun createDialog(message: String) {
+    private fun createDialog(message: String) : ConfirmDialog {
         val dialogPopup = ConfirmDialog(this@RegisterActivity, message)
         dialogPopup.setOkPopup()
-        dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
-            dialogPopup.cancel()
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+        return dialogPopup
     }
 
     private fun validation_check(name:String, email:String, password:String, phone:String) {
@@ -95,13 +91,20 @@ class RegisterActivity : AppCompatActivity(), SignupViewModel.OnFinishedSignupLi
             }
         }
     }
-    override fun onSuccess() {
-        val intent = Intent(this@RegisterActivity, HomeActivity::class.java)
-        startActivity(intent)
-        finish()
+    override fun onSuccess(message: String) {
+        createDialog(message)
+        val dialogPopup = createDialog(message)
+        dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     override fun onFailure(message: String) {
-        createDialog(message)
+        val dialogPopup = createDialog(message)
+        dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+            dialogPopup.cancel()
+        }
     }
 }
