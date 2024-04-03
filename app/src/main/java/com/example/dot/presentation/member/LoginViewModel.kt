@@ -29,11 +29,12 @@ class LoginViewModel : ViewModel() {
                 when (response.code()) {
                     200 -> {
                         val jsonObj = JSONObject(response.body()!!.result.toString())
-                        val grant = jsonObj.getString("grantType")
-                        val accessToken = jsonObj.getString("accessToken")
+                        val idx = jsonObj.getInt("idx").toString()
+                        val grant = jsonObj.getJSONObject("jwtToken").getString("grantType")
+                        val accessToken = jsonObj.getJSONObject("jwtToken").getString("accessToken")
+                        GlobalApplication.prefs.setString("idx", idx)
                         GlobalApplication.prefs.setString("accessToken", "$grant $accessToken")
                         onFinishedLoginListener.onSuccess()
-
                     }
 
                     500 -> onFinishedLoginListener.onFailure("로그인에 실패하였습니다.")

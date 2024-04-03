@@ -18,8 +18,9 @@ class MemberInfoViewModel : ViewModel() {
     }
 
     fun showMemberInfo(OnGetDataListener: OnGetDataListener) {
+        val idx = GlobalApplication.prefs.getString("idx", "")
         val accessToken = GlobalApplication.prefs.getString("accessToken", "")
-        ApiObject.manageMember().MemberByEmail(accessToken).enqueue(object : Callback<ApiResponse> {
+        ApiObject.manageMember().memberByEmail(accessToken, idx).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(
                 call: Call<ApiResponse>,
                 response: Response<ApiResponse>

@@ -49,9 +49,10 @@ class MemberWithdrawViewModel : ViewModel() {
         onFinishedLoginListener: MemberWithdrawViewModel.OnFinishedLoginListener
     ) {
         val apiObject = ApiObject
+        val idx = GlobalApplication.prefs.getString("idx", "")
         val accessToken = GlobalApplication.prefs.getString("accessToken", "")
 
-        apiObject.manageMember().memberWithdraw(accessToken)
+        apiObject.manageMember().memberWithdraw(accessToken, idx)
             .enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     when (response.code()) {
