@@ -20,9 +20,10 @@ class MemberEditViewModel : ViewModel(){
         onFinishedEditListener: MemberEditViewModel.OnFinishedEditListener
     ) {
         val apiObject = ApiObject
+        val idx = GlobalApplication.prefs.getString("idx", "")
         val accessToken = GlobalApplication.prefs.getString("accessToken", "")
 
-        apiObject.manageMember().memberEdit(accessToken, memberInfoRequest)
+        apiObject.manageMember().memberEdit(accessToken, memberInfoRequest, idx)
             .enqueue(object : Callback<ApiResponse> {
                 override fun onResponse(
                     call: Call<ApiResponse>,

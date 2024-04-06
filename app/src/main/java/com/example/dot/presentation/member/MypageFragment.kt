@@ -32,7 +32,7 @@ class MypageFragment : Fragment(), MemberInfoViewModel.OnGetDataListener {
     }
 
     private fun setData() {
-        memberInfoViewModel.showMemberInfo(OnGetDataListener = this)
+        memberInfoViewModel.showMemberInfo(onGetDataListener = this)
     }
 
     private fun setupClickListener() {

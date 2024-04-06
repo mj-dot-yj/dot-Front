@@ -6,6 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface MemberService {
     @POST("/member/login")
@@ -29,19 +30,22 @@ interface MemberService {
         @Body jsonParams: CheckPwRequest
     ): Call<ApiResponse>
 
-    @DELETE("/member/delete")
+    @DELETE("/member/delete/{idx}")
     fun memberWithdraw(
-        @Header("Authorization") accessToken: String
+        @Header("Authorization") accessToken: String,
+        @Path("idx") idx: String
     ): Call<Void>
 
-    @POST("/member/info")
-    fun MemberByEmail(
-        @Header("Authorization") accessToken: String
+    @POST("/member/info/{idx}")
+    fun memberByEmail(
+        @Header("Authorization") accessToken: String,
+        @Path("idx") idx: String
     ): Call<ApiResponse>
 
-    @POST("/member/modify")
+    @POST("/member/modify/{idx}")
     fun memberEdit(
         @Header("Authorization") accessToken: String,
-        @Body jsonParams: MemberInfoRequest
+        @Body jsonParams: MemberInfoRequest,
+        @Path("idx") idx: String
     ): Call<ApiResponse>
 }
