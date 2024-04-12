@@ -17,6 +17,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.todo.AddPriorityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.todo.AddTodoActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.member.MemberWithdrawActivity"
             android:exported="false" />
         <activity
