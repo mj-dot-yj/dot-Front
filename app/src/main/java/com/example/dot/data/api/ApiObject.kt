@@ -1,6 +1,7 @@
 package com.example.dot.data.api
 
 import com.example.dot.data.api.service.MemberService
+import com.example.dot.data.api.service.TodoService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
@@ -17,6 +18,10 @@ interface ApiObject {
 
         fun manageMember(): MemberService {
             return retrofit.create(MemberService::class.java)
+        }
+
+        fun manageTodo(): TodoService {
+            return retrofit.create(TodoService::class.java)
         }
 
     }
