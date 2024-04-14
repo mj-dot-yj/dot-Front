@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.todo.AddTodoActivity">
+    tools:context=".presentation.todo.SaveTodoActivity">
 
     <ImageView
         android:id="@+id/back_button"
@@ -56,7 +56,7 @@
             app:layout_constraintTop_toTopOf="parent" >
 
             <EditText
-                android:id="@+id/editTodoName"
+                android:id="@+id/TodoTitle"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -105,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="오전  00:00"
+                    android:text="00:00"
                     android:textSize="20dp"
                     android:gravity="center" />
 
@@ -114,7 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="오후  00:00"
+                    android:text="00:00"
                     android:textSize="20dp"
                     android:gravity="center" />
 
@@ -175,7 +175,7 @@
                 android:textSize="20dp" />
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"

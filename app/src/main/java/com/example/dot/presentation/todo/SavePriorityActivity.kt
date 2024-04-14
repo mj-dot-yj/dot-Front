@@ -6,18 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.widget.FrameLayout
-import com.example.dot.databinding.ActivityAddPriorityBinding
+import com.example.dot.databinding.ActivitySavePriorityBinding
 import com.example.dot.presentation.HomeActivity
-import com.example.dot.presentation.MainActivity
-import java.util.zip.Inflater
 
-class AddPriorityActivity : AppCompatActivity() {
-    private var mBinding: ActivityAddPriorityBinding? = null
+class SavePriorityActivity : AppCompatActivity() {
+    private var mBinding: ActivitySavePriorityBinding? = null
     private val binding get() = mBinding!!
+    private lateinit var priority: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityAddPriorityBinding.inflate(layoutInflater)
+        mBinding = ActivitySavePriorityBinding.inflate(layoutInflater)
 
         setupTouchListener()
 
@@ -42,6 +40,7 @@ class AddPriorityActivity : AppCompatActivity() {
                     setCheckInvisibility()
                     binding!!.checkImportantUrgent.visibility = View.VISIBLE
                     binding!!.nextButton.visibility = View.VISIBLE
+                    priority = "IMPORTANT_URGENT"
                 }
             }
             true
@@ -53,6 +52,7 @@ class AddPriorityActivity : AppCompatActivity() {
                     setCheckInvisibility()
                     binding!!.checkNotimportantUrgent.visibility = View.VISIBLE
                     binding!!.nextButton.visibility = View.VISIBLE
+                    priority = "NOTIMPORTANT_URGENT"
                 }
             }
             true
@@ -64,6 +64,7 @@ class AddPriorityActivity : AppCompatActivity() {
                     setCheckInvisibility()
                     binding!!.checkImportantNoturgent.visibility = View.VISIBLE
                     binding!!.nextButton.visibility = View.VISIBLE
+                    priority = "IMPORTANT_NOTURGENT"
                 }
             }
             true
@@ -75,6 +76,7 @@ class AddPriorityActivity : AppCompatActivity() {
                     setCheckInvisibility()
                     binding!!.checkNotimportantNoturgent.visibility = View.VISIBLE
                     binding!!.nextButton.visibility = View.VISIBLE
+                    priority = "NOTIMPORTANT_NOTURGENT"
                 }
             }
             true
@@ -90,7 +92,8 @@ class AddPriorityActivity : AppCompatActivity() {
         }
 
         binding!!.nextButton.setOnClickListener {
-            val intent = Intent(this, AddTodoActivity::class.java)
+            val intent = Intent(this, SaveTodoActivity::class.java)
+            intent.putExtra("priority", priority)
             startActivity(intent)
         }
     }
