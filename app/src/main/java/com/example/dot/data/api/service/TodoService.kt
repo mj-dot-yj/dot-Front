@@ -1,13 +1,17 @@
 package com.example.dot.data.api.service
 
 import com.example.dot.data.model.ApiResponse
+import com.example.dot.data.model.TodoRequest
 import retrofit2.Call
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface TodoService {
+    @POST("/todo/saveTodo")
+    fun todoSave(
+        @Header("Authorization") accessToken: String,
+        @Body jsonParams: TodoRequest
+    ): Call<ApiResponse>
+
     @GET("/todo/info/{idx}")
     fun todoById(
         @Header("Authorization") accessToken: String,

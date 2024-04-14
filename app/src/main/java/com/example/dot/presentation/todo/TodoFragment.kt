@@ -6,9 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.adapters.FrameLayoutBindingAdapter
-import com.example.dot.R
-import com.example.dot.databinding.FragmentMypageBinding
 import com.example.dot.databinding.FragmentTodoBinding
 
 class TodoFragment : Fragment() {
@@ -29,7 +26,7 @@ class TodoFragment : Fragment() {
     private fun setupClickListener() {
 
         binding!!.addTodo.setOnClickListener {
-            var intent = Intent(this.activity, AddPriorityActivity::class.java)
+            var intent = Intent(this.activity, SavePriorityActivity::class.java)
             startActivity(intent)
         }
 
