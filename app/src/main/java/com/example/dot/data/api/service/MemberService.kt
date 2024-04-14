@@ -48,4 +48,10 @@ interface MemberService {
         @Body jsonParams: MemberInfoRequest,
         @Path("idx") idx: String
     ): Call<ApiResponse>
+
+    @POST("/todo/saveTodo")
+    fun todoSave(
+        @Header("Authorization") accessToken: String,
+        @Body jsonParams: TodoRequest
+    ): Call<ApiResponse>
 }
