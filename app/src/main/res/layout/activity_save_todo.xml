@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:ems="10"
-                android:hint="제목"
+                android:hint="title"
                 android:inputType="textMultiLine"
                 android:scrollHorizontally="false"
                 android:textColorHint="#80000000"
@@ -179,6 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
+                android:hint="content"
                 android:background="@drawable/memo_border"
                 android:ems="10" />
 

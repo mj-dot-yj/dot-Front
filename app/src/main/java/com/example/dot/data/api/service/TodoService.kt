@@ -23,4 +23,10 @@ interface TodoService {
         @Header("Authorization") accessToken: String,
         @Path("idx") idx: String
     ): Call<Void>
+
+    @GET("/todo/all/{idx}")
+    fun allTodoByUserId(
+        @Header("Authorization") accessToken: String,
+        @Path("idx") idx: String
+    ): Call<ApiResponse>
 }

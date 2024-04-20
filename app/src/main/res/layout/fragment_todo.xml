@@ -105,14 +105,16 @@
                 android:layout_height="250dp"
                 android:layout_gravity="left"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                tools:listitem="@layout/todo_item"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/important_urgent"
                 android:layout_width="190dp"
                 android:layout_height="250dp"
                 android:layout_gravity="right"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                tools:listitem="@layout/todo_item"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/notimportant_noturgent"
@@ -120,19 +122,19 @@
                 android:layout_height="250dp"
                 android:layout_gravity="left|bottom"
                 android:layout_marginLeft="15dp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                tools:listitem="@layout/todo_item"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/notimportant_urgent"
                 android:layout_width="190dp"
                 android:layout_height="250dp"
                 android:layout_gravity="right|bottom"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                tools:listitem="@layout/todo_item"/>
 
         </FrameLayout>
 
     </LinearLayout>
-
-
 
 </FrameLayout>
