@@ -73,7 +73,9 @@ class SaveTodoActivity : AppCompatActivity(), SaveTodoViewModel.OnFinishedSaveTo
 
         binding!!.btnDone.setOnClickListener{
             var title = binding.TodoTitle.text.toString()
+            if(title.equals("") || title == null) { title = "title" }
             var content = binding.content.text.toString()
+            if(content.equals("") || content == null) { content = "content" }
             var user_id = GlobalApplication.prefs.getString("idx", "").toLong()
             var start_time = binding.startTime.text.toString()
             var end_time = binding.endTime.text.toString()
