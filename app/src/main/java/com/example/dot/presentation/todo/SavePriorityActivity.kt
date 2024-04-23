@@ -93,6 +93,8 @@ class SavePriorityActivity : AppCompatActivity() {
 
         binding!!.nextButton.setOnClickListener {
             val intent = Intent(this, SaveTodoActivity::class.java)
+            val date = getIntent().getStringExtra("date")
+            intent.putExtra("date", date)
             intent.putExtra("priority", priority)
             startActivity(intent)
         }
