@@ -24,6 +24,13 @@ interface TodoService {
         @Path("idx") idx: String
     ): Call<Void>
 
+    @POST("/todo/modify/{idx}")
+    fun modifyTodo(
+        @Header("Authorization") accessToken: String,
+        @Body jsonParams: TodoRequest,
+        @Path("idx") idx: String
+    ): Call<ApiResponse>
+
     @GET("/todo/all/{idx}/{date}")
     fun allTodoByUserIdAndDate(
         @Header("Authorization") accessToken: String,

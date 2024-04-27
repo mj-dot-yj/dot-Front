@@ -1,5 +1,6 @@
 package com.example.dot.presentation.todo
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -35,7 +36,12 @@ class TodoInfoActivity : AppCompatActivity(), TodoInfoViewModel.OnGetDataListene
             onBackPressed()
         }
 
-        binding.btnEdit.setOnClickListener { }
+        binding.btnEdit.setOnClickListener {
+            val intent = Intent(this, TodoEditActivity::class.java)
+            intent.putExtra("id", todoId)
+            startActivity(intent)
+            finish()
+        }
 
         binding.btnDelete.setOnClickListener {
             todoInfoViewModel.deleteInfo(todoId, onDeleteListener = this)
