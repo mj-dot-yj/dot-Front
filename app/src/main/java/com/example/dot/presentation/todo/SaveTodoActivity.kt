@@ -1,10 +1,8 @@
 package com.example.dot.presentation.todo
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -15,12 +13,8 @@ import com.example.dot.R
 import com.example.dot.data.model.TodoRequest
 import com.example.dot.databinding.ActivitySaveTodoBinding
 import com.example.dot.presentation.HomeActivity
-import com.example.dot.presentation.common.ConfirmDialog
 import com.example.dot.util.GlobalApplication
-import java.time.LocalDate
 import java.time.LocalTime
-
-import java.time.format.DateTimeFormatter
 
 
 
@@ -79,10 +73,10 @@ class SaveTodoActivity : AppCompatActivity(), SaveTodoViewModel.OnFinishedSaveTo
             var user_id = GlobalApplication.prefs.getString("idx", "").toLong()
             var start_time = binding.startTime.text.toString()
             var end_time = binding.endTime.text.toString()
-            var priority = getIntent().getStringExtra("priority")
-            var Date = LocalDate.now().toString()
+            var priority = intent.getStringExtra("priority")
+            var date = intent.getStringExtra("date")
 
-            val todoRequest = TodoRequest(user_id, title, content, start_time, end_time, alarmed, priority, Date)
+            val todoRequest = TodoRequest(user_id, title, content, start_time, end_time, alarmed, priority, date)
             saveTodoViewModel.saveTodo(todoRequest, onFinishedsaveTodoListener = this)
         }
     }

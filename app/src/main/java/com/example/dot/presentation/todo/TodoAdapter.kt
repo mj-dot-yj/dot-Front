@@ -10,10 +10,22 @@ import com.example.dot.data.model.TodoItem
 
 class TodoAdapter(val todoList: ArrayList<TodoItem>): RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onItemClick(position: Int) {}
+    }
+
+    var itemClickListener: OnItemClickListener? = null
+
     inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title = itemView.findViewById<TextView>(R.id.title)
         val start_time = itemView.findViewById<TextView>(R.id.start_time)
         val end_time = itemView.findViewById<TextView>(R.id.end_time)
+
+        init {
+            itemView.setOnClickListener {
+                itemClickListener?.onItemClick(adapterPosition)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
