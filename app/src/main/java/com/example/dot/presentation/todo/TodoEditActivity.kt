@@ -34,9 +34,6 @@ class TodoEditActivity : AppCompatActivity(), TodoInfoViewModel.OnGetDataListene
         saveTodoViewModel = ViewModelProvider(this)[TodoEditViewModel::class.java]
         todoInfoViewModel = ViewModelProvider(this)[TodoInfoViewModel::class.java]
 
-        binding!!.startSwitch.isChecked = false
-        binding!!.endSwitch.isChecked = false
-
         setupClickListener()
         setSpinnerAdapter()
         todoId = intent.getStringExtra("id")!!
@@ -188,9 +185,16 @@ class TodoEditActivity : AppCompatActivity(), TodoInfoViewModel.OnGetDataListene
 
     override fun onSuccessGetData(todoInfoResponse: TodoInfoResponse) {
         binding!!.titleValue.setText(todoInfoResponse.title)
-        binding!!.startTimeValue.text = todoInfoResponse.startTime
-        binding!!.endTimeValue.text = todoInfoResponse.endTime
         binding!!.memoValue.setText(todoInfoResponse.content)
+
+        if (todoInfoResponse.startTime != null) {
+            binding!!.startSwitch.isChecked = true
+            binding!!.startTimeValue.text = todoInfoResponse.startTime
+        }
+        if (todoInfoResponse.endTime != null) {
+            binding!!.endSwitch.isChecked = true
+            binding!!.endTimeValue.text = todoInfoResponse.endTime
+        }
 
         when (todoInfoResponse.alarmed) {
             "0.0" -> {
