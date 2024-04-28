@@ -1,5 +1,6 @@
 package com.example.dot.presentation.todo
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -15,6 +16,7 @@ class TodoInfoActivity : AppCompatActivity(), TodoInfoViewModel.OnGetDataListene
     private val binding get() = mBinding!!
     private lateinit var todoInfoViewModel: TodoInfoViewModel
     private lateinit var todoId: String
+    private lateinit var todoDate : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +37,13 @@ class TodoInfoActivity : AppCompatActivity(), TodoInfoViewModel.OnGetDataListene
             onBackPressed()
         }
 
-        binding.btnEdit.setOnClickListener { }
+        binding.btnEdit.setOnClickListener {
+            val intent = Intent(this, TodoEditActivity::class.java)
+            intent.putExtra("id", todoId)
+            intent.putExtra("date", todoDate)
+            startActivity(intent)
+            finish()
+        }
 
         binding.btnDelete.setOnClickListener {
             todoInfoViewModel.deleteInfo(todoId, onDeleteListener = this)
@@ -53,6 +61,7 @@ class TodoInfoActivity : AppCompatActivity(), TodoInfoViewModel.OnGetDataListene
         binding!!.stateValue.text = todoInfoResponse.state
         binding!!.alarmValue.text = todoInfoResponse.alarmed
         binding!!.memoValue.text = todoInfoResponse.content
+        todoDate = todoInfoResponse.todoDate!!
 
     }
 

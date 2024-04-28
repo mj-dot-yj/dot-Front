@@ -132,7 +132,7 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
 
         for(i in 0 until todoInfoResponseArray.length()) {
             var iObject = todoInfoResponseArray.getJSONObject(i)
-            var id = iObject.getString("id")
+            var id = iObject.getString("id").toDouble().toInt().toString()
             var title = iObject.getString("title")
             var startTime = iObject.getString("startTime")
             var endTime = iObject.getString("endTime")
