@@ -2,6 +2,7 @@ package com.example.dot.presentation.todo
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,7 +18,7 @@ import org.json.JSONArray
 import java.time.LocalDate
 import java.util.Calendar
 
-class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
+class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener, TodoViewModel.onModifyStateListener {
 
     private var binding: FragmentTodoBinding? = null
     private lateinit var todoViewModel: TodoViewModel
@@ -53,19 +54,28 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
             var date = ""
             val data = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
                 if(month in 0..9) {
-                    date = "${year}-0${month+1}-${day}"
+                    if(day in 0..9) {
+                        date = "${year}-0${month+1}-0${day}"
+                    }
+                    else {
+                        date = "${year}-0${month+1}-${day}"
+                    }
                     binding!!.date.text = date
                 }
                 else {
-                    date = "${year}-${month+1}-${day}"
+                    if(day in 0..9) {
+                        date = "${year}-${month+1}-0${day}"
+                    }
+                    else {
+                        date = "${year}-${month+1}-${day}"
+                    }
                     binding!!.date.text = date
                 }
                 val userId = GlobalApplication.prefs.getString("idx", "")
-                todoViewModel.getAllTodo(userId, date, this)
+                todoViewModel.getAllTodo(userId, date, onGetAllTodoListener = this)
 
             }
             context?.let { it1 -> DatePickerDialog(it1, data, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show() }
-
         }
     }
 
@@ -89,6 +99,21 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
                 startActivity(intent)
             }
         }
+        //체크 버튼 클릭 시 취소선
+        Adapter_important_urgent.checkClickListener = object : TodoAdapter.OnCheckClickListener {
+            override fun onCheckClick(check: Boolean, holder: TodoAdapter.TodoViewHolder, position: Int) {
+                var state = ""
+                if(check) {
+                    holder.title.paintFlags = holder.title.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    state = "DONE"
+                }
+                else {
+                    holder.title.paintFlags = holder.title.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    state = "IN_PROGRESS"
+                }
+                todoViewModel.saveState(state, important_urgent[position].id, this@TodoFragment)
+            }
+        }
 
         binding!!.importantNoturgent.adapter = Adapter_important_noturgent
         binding!!.importantNoturgent.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -98,6 +123,20 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
                 val intent = Intent(context, TodoInfoActivity::class.java)
                 intent.putExtra("id", item.id)
                 startActivity(intent)
+            }
+        }
+        Adapter_important_noturgent.checkClickListener = object : TodoAdapter.OnCheckClickListener {
+            override fun onCheckClick(check: Boolean, holder: TodoAdapter.TodoViewHolder, position: Int) {
+                var state = ""
+                if(check) {
+                    holder.title.paintFlags = holder.title.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    state = "DONE"
+                }
+                else {
+                    holder.title.paintFlags = holder.title.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    state = "IN_PROGRESS"
+                }
+                todoViewModel.saveState(state, important_noturgent[position].id, this@TodoFragment)
             }
         }
 
@@ -111,6 +150,20 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
                 startActivity(intent)
             }
         }
+        Adapter_notimportant_urgent.checkClickListener = object : TodoAdapter.OnCheckClickListener {
+            override fun onCheckClick(check: Boolean, holder: TodoAdapter.TodoViewHolder, position: Int) {
+                var state = ""
+                if(check) {
+                    holder.title.paintFlags = holder.title.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    state = "DONE"
+                }
+                else {
+                    holder.title.paintFlags = holder.title.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    state = "IN_PROGRESS"
+                }
+                todoViewModel.saveState(state, notimportant_urgent[position].id, this@TodoFragment)
+            }
+        }
 
         binding!!.notimportantNoturgent.adapter = Adapter_notimportant_noturgent
         binding!!.notimportantNoturgent.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -120,6 +173,20 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
                 val intent = Intent(context, TodoInfoActivity::class.java)
                 intent.putExtra("id", item.id)
                 startActivity(intent)
+            }
+        }
+        Adapter_notimportant_noturgent.checkClickListener = object : TodoAdapter.OnCheckClickListener {
+            override fun onCheckClick(check: Boolean, holder: TodoAdapter.TodoViewHolder, position: Int) {
+                var state = ""
+                if(check) {
+                    holder.title.paintFlags = holder.title.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    state = "DONE"
+                }
+                else {
+                    holder.title.paintFlags = holder.title.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    state = "IN_PROGRESS"
+                }
+                todoViewModel.saveState(state, notimportant_noturgent[position].id, this@TodoFragment)
             }
         }
     }
@@ -136,7 +203,10 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
             var title = iObject.getString("title")
             var startTime = iObject.getString("startTime")
             var endTime = iObject.getString("endTime")
-            var todoItem = TodoItem(id, title, startTime, endTime)
+            var state = iObject.getString("state")
+            var check = false
+            if(state == "DONE") { check = true }
+            var todoItem = TodoItem(id, check, title, startTime, endTime)
             var priority = iObject.getString("priority")
 
             when(priority){
@@ -151,5 +221,13 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener {
 
     override fun onFailure(message: String) {
         Toast.makeText(context, "접속 실패", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessModifyState(message: String) {
+
+    }
+
+    override fun onFailureModifyState(message: String) {
+        Toast.makeText(context, "진행 수정 실패", Toast.LENGTH_SHORT).show()
     }
 }
