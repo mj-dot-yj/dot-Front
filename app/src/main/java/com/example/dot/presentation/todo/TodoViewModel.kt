@@ -23,6 +23,12 @@ class TodoViewModel : ViewModel() {
         fun onFailure(message: String)
     }
 
+    interface onModifyStateListener {
+        fun onSuccessModifyState(message: String)
+
+        fun onFailureModifyState(message: String)
+    }
+
     fun getAllTodo(idx: String, date: String, onGetAllTodoListener: onGetAllTodoListener) {
         val accessToken = GlobalApplication.prefs.getString("accessToken", "")
         total.value = (total.value)?.plus(date)
@@ -38,6 +44,26 @@ class TodoViewModel : ViewModel() {
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
                 Log.d("getAllTodo Fail", t.message.toString())
+            }
+        })
+    }
+
+    fun saveState(state: String, todoId: String, onModifyStateListener: onModifyStateListener) {
+        val apiObject = ApiObject
+        val accessToken = GlobalApplication.prefs.getString("accessToken", "")
+
+        apiObject.manageTodo().modifyState(accessToken, state, todoId).enqueue(object: Callback<ApiResponse> {
+            override fun onResponse(
+                call: Call<ApiResponse>,
+                response: Response<ApiResponse>
+            ) {
+                when(response.code()) {
+                    200 -> { onModifyStateListener.onSuccessModifyState("state 수정 성공") }
+                    500 -> { onModifyStateListener.onFailureModifyState("state 수정 실패") }
+                }
+            }
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                onModifyStateListener.onFailureModifyState("통신 실패")
             }
         })
     }
