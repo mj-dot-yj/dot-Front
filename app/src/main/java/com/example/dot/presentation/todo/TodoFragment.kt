@@ -22,6 +22,7 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener, TodoViewMod
 
     private var binding: FragmentTodoBinding? = null
     private lateinit var todoViewModel: TodoViewModel
+    private lateinit var calendar: Calendar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,13 +33,18 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener, TodoViewMod
         todoViewModel = ViewModelProvider(this)[TodoViewModel::class.java]
 
         setupClickListener()
-
+        calendar = Calendar.getInstance()
         var todoDate = LocalDate.now().toString()
         binding!!.date.text = todoDate
-        val userId = GlobalApplication.prefs.getString("idx", "")
-        todoViewModel.getAllTodo(userId, todoDate, onGetAllTodoListener = this)
 
         return binding!!.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        var date = binding!!.date.text.toString()
+        val userId = GlobalApplication.prefs.getString("idx", "")
+        todoViewModel.getAllTodo(userId, date, onGetAllTodoListener = this)
     }
 
     private fun setupClickListener() {
@@ -50,7 +56,6 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener, TodoViewMod
         }
 
         binding!!.calendar.setOnClickListener {
-            val calendar = Calendar.getInstance()
             var date = ""
             val data = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
                 if(month in 0..9) {
@@ -72,6 +77,7 @@ class TodoFragment : Fragment(), TodoViewModel.onGetAllTodoListener, TodoViewMod
                     binding!!.date.text = date
                 }
                 val userId = GlobalApplication.prefs.getString("idx", "")
+                calendar.set(year, month, day)
                 todoViewModel.getAllTodo(userId, date, onGetAllTodoListener = this)
 
             }
