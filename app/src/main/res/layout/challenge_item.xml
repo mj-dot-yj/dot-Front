@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/challengeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="title"
+            android:textSize="20dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/challengeStartTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="start_time"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="~"
+                android:layout_marginLeft="5dp"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/challengeEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="end_time"
+                android:layout_marginLeft="5dp"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="count"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:layout_marginLeft="5dp"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/total"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="total_count"
+                android:layout_marginLeft="5dp"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
