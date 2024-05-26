@@ -1,5 +1,6 @@
 package com.example.dot.data.api
 
+import com.example.dot.data.api.service.ChallengeService
 import com.example.dot.data.api.service.MemberService
 import com.example.dot.data.api.service.TodoService
 import com.google.gson.Gson
@@ -24,5 +25,8 @@ interface ApiObject {
             return retrofit.create(TodoService::class.java)
         }
 
+        fun manageChallenge(): ChallengeService {
+            return retrofit.create(ChallengeService::class.java)
+        }
     }
 }
