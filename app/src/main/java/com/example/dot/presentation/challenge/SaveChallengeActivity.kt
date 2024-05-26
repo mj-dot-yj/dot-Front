@@ -1,23 +1,34 @@
 package com.example.dot.presentation.challenge
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.TimePicker
+import android.widget.ToggleButton
+import androidx.lifecycle.ViewModelProvider
 import com.example.dot.R
+import com.example.dot.data.model.ChallengeRequest
 import com.example.dot.databinding.ActivitySaveChallengeBinding
+import com.example.dot.util.GlobalApplication
 import java.time.LocalTime
 
-class SaveChallengeActivity : AppCompatActivity() {
+class SaveChallengeActivity : AppCompatActivity(), SaveChallengeViewModel.OnFinishedSaveChallengeListener {
     private var mbinding: ActivitySaveChallengeBinding? = null
     private val binding get() = mbinding!!
+    private var alarmed: Long? = null
+    private var totalCount: Long? = null
+    private var period: ArrayList<String> = ArrayList()
+    private lateinit var saveChallengeViewModel: SaveChallengeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mbinding = ActivitySaveChallengeBinding.inflate(layoutInflater)
+        saveChallengeViewModel = ViewModelProvider(this)[SaveChallengeViewModel::class.java]
 
         setupClickListener()
         setSpinnerAdapter()
@@ -26,6 +37,25 @@ class SaveChallengeActivity : AppCompatActivity() {
     }
 
     fun setupClickListener() {
+        //뒤로 가기 버튼
+        binding.backButton.setOnClickListener {
+            val intent = Intent(this, ChallengeFragment::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        //완료 버튼
+        binding.btnDone.setOnClickListener {
+            val userId = GlobalApplication.prefs.getString("idx", "").toLong()
+            var title = binding.title.text.toString()
+            if(title.equals("") || title == null) { title = "title" }
+            val startTime = binding.startTime.text.toString()
+            val endTime = binding.endTime.text.toString()
+            totalCount = binding.total.text.toString().toLong()
+            val challengeRequest = ChallengeRequest(userId, title, startTime, endTime, alarmed, totalCount, period.joinToString())
+            saveChallengeViewModel.saveChallenge(challengeRequest, onFinishedSaveChallengeListener = this)
+        }
+
         //시작·종료 시간 설정
         binding.startSwitch.setOnCheckedChangeListener { _, _ ->
             if(binding.startSwitch.isChecked) {
@@ -45,22 +75,27 @@ class SaveChallengeActivity : AppCompatActivity() {
                 binding.TimeContainer.removeAllViews()
             }
         }
-
-        //목표 횟수 무제한
-        binding.countCheck.setOnCheckedChangeListener { _, checked ->
-            if(checked) {
-
+    }
+    fun onCheckClicked(view: View) {
+        if(view is CheckBox) {
+            if(view.isChecked) {
+                binding.total.setText("0")
+                binding.total.isEnabled = false
             }
             else {
-
+                binding.total.isEnabled = true
             }
         }
+    }
 
-        //반복 주기 설정
-        binding.mon.setOnCheckedChangeListener { _, checked ->
-            if(checked) {
-                //체크될 경우 함수 실행
-
+    //선택 요일 설정
+    fun onToggleButtonClicked(view: View) {
+        if( view is ToggleButton) {
+            val day = view.textOn.toString()
+            if(view.isChecked) {
+                period.add(day)
+            } else {
+                period.remove(day)
             }
         }
     }
@@ -74,16 +109,15 @@ class SaveChallengeActivity : AppCompatActivity() {
         binding.Alarm.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when(position) {
-                    0 -> {}
-                    1 -> {}
-                    2 -> {}
-                    3 -> {}
-                    4 -> {}
+                    0 -> {  alarmed = 0 }
+                    1 -> {  alarmed = 5 }
+                    2 -> {  alarmed = 10 }
+                    3 -> {  alarmed = 15 }
+                    4 -> {  alarmed = 30 }
                 }
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {
-
+                alarmed = 0
             }
         }
     }
@@ -110,5 +144,11 @@ class SaveChallengeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSuccess(message: String) {
+        Log.d("success", message)
+    }
 
+    override fun onFailure(message: String) {
+        Log.d("fail", message)
+    }
 }
