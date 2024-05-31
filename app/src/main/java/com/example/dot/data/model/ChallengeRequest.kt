@@ -7,5 +7,5 @@ data class ChallengeRequest(
     var endTime: String? = null,
     var alarmed: Long? = null,
     var totalCount: Long? = null,
-    var period: String? = null
+    var days: ArrayList<String>? = null
 )
