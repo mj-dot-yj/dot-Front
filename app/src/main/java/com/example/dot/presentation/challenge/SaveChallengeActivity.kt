@@ -1,6 +1,5 @@
 package com.example.dot.presentation.challenge
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -39,9 +38,7 @@ class SaveChallengeActivity : AppCompatActivity(), SaveChallengeViewModel.OnFini
     fun setupClickListener() {
         //뒤로 가기 버튼
         binding.backButton.setOnClickListener {
-            val intent = Intent(this, ChallengeFragment::class.java)
-            startActivity(intent)
-            finish()
+            onBackPressed()
         }
 
         //완료 버튼
@@ -52,7 +49,7 @@ class SaveChallengeActivity : AppCompatActivity(), SaveChallengeViewModel.OnFini
             val startTime = binding.startTime.text.toString()
             val endTime = binding.endTime.text.toString()
             totalCount = binding.total.text.toString().toLong()
-            val challengeRequest = ChallengeRequest(userId, title, startTime, endTime, alarmed, totalCount, period.joinToString())
+            val challengeRequest = ChallengeRequest(userId, title, startTime, endTime, alarmed, totalCount, period)
             saveChallengeViewModel.saveChallenge(challengeRequest, onFinishedSaveChallengeListener = this)
         }
 
