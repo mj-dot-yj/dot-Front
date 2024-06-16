@@ -1,10 +1,14 @@
 package com.example.dot.data.model
 
+import org.json.JSONArray
+
 data class ChallengeItem(
-    val id: String,
-    val title: String,
-    val startTime: String,
-    val endTime: String,
-    val count: Long,
-    val total: Long
+    var id: String,
+    var title: String,
+    var startTime: String,
+    var endTime: String,
+    var count: Long,
+    var totalCount: Long,
+    var days: JSONArray,
+    var checked: String
 )
