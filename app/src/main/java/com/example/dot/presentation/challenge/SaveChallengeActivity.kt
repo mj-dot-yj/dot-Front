@@ -1,11 +1,13 @@
 package com.example.dot.presentation.challenge
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TimePicker
 import android.widget.ToggleButton
@@ -13,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.dot.R
 import com.example.dot.data.model.ChallengeRequest
 import com.example.dot.databinding.ActivitySaveChallengeBinding
+import com.example.dot.presentation.common.ConfirmDialog
 import com.example.dot.util.GlobalApplication
 import java.time.LocalTime
 
@@ -48,9 +51,15 @@ class SaveChallengeActivity : AppCompatActivity(), SaveChallengeViewModel.OnFini
             if(title.equals("") || title == null) { title = "title" }
             val startTime = binding.startTime.text.toString()
             val endTime = binding.endTime.text.toString()
-            totalCount = binding.total.text.toString().toLong()
-            val challengeRequest = ChallengeRequest(userId, title, startTime, endTime, alarmed, totalCount, period)
-            saveChallengeViewModel.saveChallenge(challengeRequest, onFinishedSaveChallengeListener = this)
+            var t = binding.total.text.toString()
+            if(t!!.equals("") || t == null) {
+                createDialog("목표 횟수를 입력해주세요!")
+            }
+            else {
+                totalCount = t.toLong()
+                val challengeRequest = ChallengeRequest(userId, title, startTime, endTime, alarmed, totalCount, period)
+                saveChallengeViewModel.saveChallenge(challengeRequest, onFinishedSaveChallengeListener = this)
+            }
         }
 
         //시작·종료 시간 설정
@@ -141,8 +150,16 @@ class SaveChallengeActivity : AppCompatActivity(), SaveChallengeViewModel.OnFini
         }
     }
 
+    private fun createDialog(message: String) {
+        val dialogPopup = ConfirmDialog(this@SaveChallengeActivity, message)
+        dialogPopup.setOkPopup()
+        dialogPopup.findViewById<Button>(R.id.okBtn).setOnClickListener {
+            dialogPopup.cancel()
+        }
+    }
+
     override fun onSuccess(message: String) {
-        Log.d("success", message)
+        onBackPressed()
     }
 
     override fun onFailure(message: String) {
