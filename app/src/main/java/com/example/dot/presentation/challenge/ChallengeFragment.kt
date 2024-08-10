@@ -61,6 +61,16 @@ class ChallengeFragment : Fragment(), ChallengeViewModel.onGetAllChallengeListen
             }
         }
 
+        //challenge 상세 화면 이동
+        challengeAdapter.itemClickListener = object : ChallengeAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                var item = challengeList[position]
+                var intent = Intent(context, ChallengeInfoActivity::class.java)
+                intent.putExtra("idx", item.id)
+                startActivity(intent)
+            }
+        }
+
     }
     override fun onSuccessGetAllChallenge(List: JSONArray) {
         val challengeList = ArrayList<ChallengeItem>()

@@ -14,7 +14,7 @@ import java.time.LocalDate
 class ChallengeAdapter(val challengeList: ArrayList<ChallengeItem>): RecyclerView.Adapter<ChallengeAdapter.ChallengeViewHolder>() {
 
     interface OnItemClickListener {
-        fun onItemClick(positon: Int) {}
+        fun onItemClick(position: Int) {}
     }
 
     interface OnCheckClickListener {

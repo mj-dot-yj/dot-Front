@@ -16,7 +16,7 @@ import retrofit2.Response
 class ChallengeViewModel: ViewModel() {
 
     interface onGetChallengeListener {
-        fun onSuccessGetChallenge(challenge: ChallengeInfoResponse)
+        fun onSuccessGetChallenge(challengeInfoResponse: ChallengeInfoResponse)
 
         fun onFailureGetChallenge(message: String)
 
